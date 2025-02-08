@@ -1,5 +1,3 @@
-import net from "node:net";
-
 export interface IMessageResult<T=any> {
   /**
    * 执行状态
@@ -22,13 +20,34 @@ export interface  ICallServiceMethodOptions {
   timeout?: number;
 }
 
+/**
+ * 获取调用方法
+ * @param net node:net
+ * @param pipeName 管道路径
+ * @param pluginName 自身插件名称
+ */
+export function getCallServiceMethod(net: any, pipeName: string, pluginName: string) {
+  return (action: string,
+          params: any = {},
+          options: ICallServiceMethodOptions = {}) =>
+    callServiceMethod(net, pipeName, pluginName, action, params, options);
+}
 
-// 命名管道的路径
-export async function callServiceMethod<T>(pipeName: string,
-                                           pluginName: string,
-                                           action: string,
-                                           params: any = {},
-                                           options: ICallServiceMethodOptions = {}): Promise<T | undefined> {
+/**
+ * 调用服务
+ * @param net node:net
+ * @param pipeName 管道名称
+ * @param pluginName 插件名称
+ * @param action 调用方法
+ * @param params 方法参数
+ * @param options
+ */
+export async function callServiceMethod<T>(net: any,
+                                                pipeName: string,
+                                                pluginName: string,
+                                                action: string,
+                                                params: any = {},
+                                                options: ICallServiceMethodOptions = {}): Promise<T | undefined> {
   const {timeout = 15 * 1000} = options;
   return new Promise((resolve, reject) => {
     try {
@@ -49,7 +68,7 @@ export async function callServiceMethod<T>(pipeName: string,
         reject(new Error("time out"));
       }, timeout);
 
-      client.on('data', (chunk) => {
+      client.on('data', (chunk: any) => {
         try {
           // 将新接收的数据追加到缓存
           dataBuffer += chunk.toString();
@@ -73,7 +92,7 @@ export async function callServiceMethod<T>(pipeName: string,
         }
       });
 
-      client.on('error', (err) => {
+      client.on('error', (err: any) => {
         clearTimeout(timeout);
         client.end();
         reject(err);

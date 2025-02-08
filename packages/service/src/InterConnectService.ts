@@ -1,4 +1,4 @@
-import { ServiceMessageEvent } from "./LinkMessageEvent";
+import { ServiceMessageEvent } from "./ServiceMessageEvent";
 import type Net from "node:net";
 
 export interface IMessage<T> {
