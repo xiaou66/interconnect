@@ -5,7 +5,7 @@ export default defineConfig({
   build: {
     lib: {
       entry: 'src/index.ts',
-      formats: ['cjs'],
+      formats: ['es', 'cjs'],
       fileName: (format) => `index.${format}.js`,
     },
     sourcemap: true,
