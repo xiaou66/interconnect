@@ -18,7 +18,7 @@ export interface IMessageResult {
 /**
  * 链接消息
  */
-export class LinkMessageEvent<T = any> extends CustomEvent<any> {
+export class ServiceMessageEvent<T = any> extends CustomEvent<any> {
   public params: T = {} as T;
   private message: IMessage<T>;
   private socket: any;
