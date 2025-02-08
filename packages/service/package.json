@@ -1,0 +1,36 @@
+{
+  "name": "@xiaou66/interconnect-service",
+  "version": "0.0.6",
+  "description": "Picture bed plugin system",
+  "main": "./dist/index.cjs.js",
+  "module": "./dist/index.es.js",
+  "types": "./dist/index.d.ts",
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "vite build",
+    "dev": "vite",
+    "prepare": "npm run build",
+    "publish": "npm publish"
+  },
+  "author": "xiaou",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^22.13.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.5.3",
+    "vite": "^6.0.9",
+    "vite-plugin-dts": "^4.5.0"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.es.js",
+      "require": "./dist/index.cjs.js"
+    }
+  }
+}
