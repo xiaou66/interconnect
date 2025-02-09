@@ -1,2 +1,2 @@
-export * from './InterConnectService';
+export * from './InterconnectService';
 export * from './ServiceMessageEvent';

@@ -22,7 +22,7 @@ function isLinkMessageEvent(obj: Event): obj is ServiceMessageEvent {
 
 type CleanPipPathType = (pipPath: string) => void;
 
-export class InterConnectService {
+export class InterconnectService {
   private readonly __pipPath: string;
   private __service?: any;
   private readonly __net: typeof Net;
