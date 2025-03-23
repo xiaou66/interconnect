@@ -36,7 +36,7 @@ export class ServiceClient {
    */
   constructor(net: any, pipeName: string, pluginName: string, isWindow?: boolean) {
     // 兼容之前版本问题
-    if (pipeName.split("\\")[0].length > 1) {
+    if (pipeName.split("\\").length > 1) {
       const paths = pipeName.split("\\");
       pipeName = paths[paths.length - 1];
     } else if (pipeName.split("/").length > 1) {
