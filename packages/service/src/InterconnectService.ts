@@ -30,13 +30,26 @@ export class InterconnectService {
 
   /**
    *
-   * @param pipPath 传递的目录必须存在
+   * @param pipName 管道名称
    * @param net net 库
    * @param clean 可以清理之前自动清理掉的管道文件
+   * @param isWindow 是否是 window utools 环境不需要传递
    */
-  constructor(pipPath: string, net: typeof Net, clean?: CleanPipPathType) {
+  constructor(pipName: string, net: typeof Net, clean?: CleanPipPathType, isWindow?: boolean) {
+    if(isWindow === undefined) {
+      if (!window.utools) {
+        throw new Error("Interconnect service requires isWindow parameter");
+      }
+      isWindow = utools.isWindows();
+    }
+    if (isWindow) {
+      this.__pipPath = `\\\\.\\pipe\\${pipName}`;
+    } else {
+      const tempPath = utools.getPath('temp').endsWith('/') ? utools.getPath('temp') : `${utools.getPath('temp')}/`;
+      this.__pipPath = tempPath + pipName;
+    }
+    console.log('pipeName', this.__pipPath);
     this.__net = net;
-    this.__pipPath = pipPath;
     this.__clean = clean;
   }
 
@@ -67,7 +80,9 @@ export class InterconnectService {
    * @private
    */
   private createServer() {
-    return this.__net.createServer((socket: any) => {
+    return this.__net.createServer({
+      allowHalfOpen: true,
+    }, (socket: any) => {
       let dataBuffer = ''; // 用于缓存数据
       socket.on('data', (data: any) => {
         dataBuffer += data.toString();

@@ -32,10 +32,32 @@ export class ServiceClient {
    * @param net node:net
    * @param pipeName 管道名称
    * @param pluginName 自身插件名称
+   * @param isWindow 是否是 window utools 环境不需要传递
    */
-  constructor(net: any, pipeName: string, pluginName: string) {
+  constructor(net: any, pipeName: string, pluginName: string, isWindow?: boolean) {
+    // 兼容之前版本问题
+    if (pipeName.split("\\")[0].length > 1) {
+      const paths = pipeName.split("\\");
+      pipeName = paths[paths.length - 1];
+    } else if (pipeName.split("/").length > 1) {
+      const paths = pipeName.split("/");
+      pipeName = paths[paths.length - 1];
+    }
     this.__net = net;
-    this.__pipeName = pipeName;
+    if(isWindow === undefined) {
+      if (!window.utools) {
+        throw new Error("Interconnect service requires isWindow parameter");
+      }
+      isWindow = utools.isWindows();
+    }
+
+    if (isWindow) {
+      this.__pipeName = `\\\\.\\pipe\\${pipeName}`;
+    } else {
+      const tempPath = utools.getPath('temp').endsWith('/') ? utools.getPath('temp') : `${utools.getPath('temp')}/`;
+      this.__pipeName = tempPath + pipeName;
+    }
+    console.log('pipeName', this.__pipeName);
     this.__pluginName = pluginName;
   }
 
