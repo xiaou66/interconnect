@@ -54,11 +54,22 @@ export class ServiceClient {
     if (isWindow) {
       this.__pipeName = `\\\\.\\pipe\\${pipeName}`;
     } else {
-      const tempPath = utools.getPath('temp').endsWith('/') ? utools.getPath('temp') : `${utools.getPath('temp')}/`;
+      const tempPath = this.getTempPath().endsWith('/') ? this.getTempPath() : `${this.getTempPath()}/`;
       this.__pipeName = tempPath + pipeName;
     }
-    console.log('pipeName', this.__pipeName);
     this.__pluginName = pluginName;
+  }
+
+  getTempPath() {
+    if (typeof window !== 'undefined') {
+      if (window && window.utools) {
+        return utools.getPath('temp');
+      }
+    } else {
+      // 非浏览器环境，执行其他逻辑
+      return require('os').tmpdir();
+    }
+
   }
 
   /**
@@ -91,7 +102,6 @@ export class ServiceClient {
         }, timeout);
 
         client.on('data', (chunk: any) => {
-          console.log('data', chunk)
           try {
             // 将新接收的数据追加到缓存
             dataBuffer += chunk.toString();
