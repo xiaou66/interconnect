@@ -126,9 +126,9 @@ export class ServiceClient {
         });
 
         client.on('error', (err: any) => {
-          clearTimeout(timeout);
+          clearTimeout(timer);
           client.end();
-          reject(err);
+          reject(new Error(`连接服务失败 [${this.__pipeName}]: ${err.message || err}`));
         });
       }catch (e) {
         reject(e);

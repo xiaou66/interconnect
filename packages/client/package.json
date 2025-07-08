@@ -1,6 +1,6 @@
 {
   "name": "@xiaou66/interconnect-client",
-  "version": "0.0.14",
+  "version": "0.0.16",
   "description": "interconnect-client",
   "main": "./dist/index.cjs.js",
   "module": "./dist/index.es.js",
